@@ -1,32 +1,36 @@
 <template>
-  <div id="app">
-    <div id="nav">
-      <router-link to="/">Home</router-link> |
-      <router-link to="/about">About</router-link>
-    </div>
-    <router-view/>
-  </div>
+  <v-app>
+      
+
+    <v-main>
+      <router-view/>
+    </v-main>
+  </v-app>
 </template>
 
-<style>
-#app {
-  font-family: Avenir, Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
+<script>
 
-#nav {
-  padding: 30px;
-}
+export default {
+  name: 'App',
 
-#nav a {
-  font-weight: bold;
-  color: #2c3e50;
+  data: () => ({
+    //
+  }),
+  watch: {
+    '$route' (to, from) {
+      const Paths = 'Route changed from ' + from.path + ' to ' + to.path;
+      const today = new Date();
+      const yearMonthDay = today.getFullYear()+'-'+(today.getMonth()+1)+'-'+today.getDate()
+      const HourMin = today.getHours() + ":" + today.getMinutes() + ":" + today.getSeconds();
+      const who = localStorage.getItem("areyouadmin");
+      const AllDatas = {
+        Paths,
+        yearMonthDay,
+        HourMin,
+        who
+      }
+      this.$store.commit("setPathFollow", AllDatas);
+    }
 }
-
-#nav a.router-link-exact-active {
-  color: #42b983;
-}
-</style>
+};
+</script>
