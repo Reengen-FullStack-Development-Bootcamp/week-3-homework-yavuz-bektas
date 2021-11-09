@@ -38,7 +38,7 @@ Part of an exciting new experiment to use prediction markets to trade tokens on 
 * [Vue.js](https://vuejs.org/)
 * [Vuex](https://vuex.vuejs.org/)
 * [Router](https://router.vuejs.org/)
-* [Router](https://vuetifyjs.com/)
+* [Vuetify](https://vuetifyjs.com/)
 * [Alpha Vontage Api](https://rapidapi.com/alphavantage/api/alpha-vantage/)
 
 
