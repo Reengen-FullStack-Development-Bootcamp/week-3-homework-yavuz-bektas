@@ -10,7 +10,7 @@ export default new Vuex.Store({
     apiURL: "https://alpha-vantage.p.rapidapi.com",
     headers: {
       "x-rapidapi-host": "alpha-vantage.p.rapidapi.com",
-      "x-rapidapi-key": "04f1cf8d8dmsh83b013b0557f2c0p12b759jsna835a2b2a9c2", //api kodu
+      "x-rapidapi-key": "", //api kodu
     },
     searchResults: [],
     dailySeries: [],
