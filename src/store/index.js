@@ -10,7 +10,7 @@ export default new Vuex.Store({
     apiURL: "https://alpha-vantage.p.rapidapi.com",
     headers: {
       "x-rapidapi-host": "alpha-vantage.p.rapidapi.com",
-      "x-rapidapi-key": "", //api kodu
+      "x-rapidapi-key": "04f1cf8d8dmsh83b013b0557f2c0p12b759jsna835a2b2a9c2", //api kodu
     },
     searchResults: [],
     dailySeries: [],
@@ -57,13 +57,15 @@ export default new Vuex.Store({
         .catch((err) => console.log(err));
     },
     getTimeSeriesDaily({ state, commit }, payload) {
+      var comingdata = payload.daymonthyear
+      console.log(comingdata);
       commit("setTimeSeriesDaily", []);
       return axios
         .get(`${state.apiURL}/query`, {
           headers: { ...state.headers },
           params: {
-            symbol: payload,
-            function: "TIME_SERIES_DAILY",
+            symbol: payload.symbol,
+            function: payload.daymonthyear,
             datatype: "json",
             outputsize: "compact",
           },
@@ -71,7 +73,7 @@ export default new Vuex.Store({
         .then((res) => {
           console.log(res.data);
           let metaData = res.data["Meta Data"];
-          let data = res.data["Time Series (Daily)"];
+          let data = res.data[payload.daymonthyearr];
           let comingData = [];
           Object.keys(data).forEach((item) => {
             let obj = new Object({

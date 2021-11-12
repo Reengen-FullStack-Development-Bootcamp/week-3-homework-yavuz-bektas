@@ -14,13 +14,26 @@
                 </v-list-item>
               </v-list>
             </v-sheet>
-            <br>
+            <br />
             <div class="text-center">
-              <v-btn @click="backToHomePage" rounded color="blue lighten-3" dark> Ana Sayfaya Dön </v-btn>
+              <v-btn
+                @click="backToHomePage"
+                rounded
+                color="blue lighten-3"
+                dark
+              >
+                Ana Sayfaya Dön
+              </v-btn>
             </div>
           </v-col>
           <v-col>
             <v-sheet rounded="lg">
+              <v-btn @click="monthData()" rounded color="green" dark>
+                Ay
+              </v-btn>
+              <v-btn @click="yearData()" rounded color="green" dark>
+                Yıl
+              </v-btn>
               <div id="chart" ref="chart"></div>
             </v-sheet>
           </v-col>
@@ -36,7 +49,11 @@ import * as d3 from "d3";
 
 export default {
   created() {
-    this.$store.dispatch("getTimeSeriesDaily", this.$route.query.symbol);
+    this.$store.dispatch("getTimeSeriesDaily", {
+      symbol: this.$route.query.symbol,
+      daymonthyear: "TIME_SERIES_DAILY",
+      daymonthyearr: "Time Series (Daily)",
+    });
   },
 
   mounted() {
@@ -54,8 +71,8 @@ export default {
 
       let margin = { top: 70, right: 50, bottom: 50, left: 50 };
       let padding = { top: 30, right: 70, bottom: 50, left: 70 };
-      let width = 1000; 
-      let height = 400; 
+      let width = 1000;
+      let height = 400;
       let space = 10;
       let vol_width = width;
       let vol_height = 200;
@@ -64,13 +81,13 @@ export default {
       let chart_width = width + padding.left + padding.right;
       let svg_width = chart_width + margin.left + margin.right;
       let svg_height = chart_height + margin.top + margin.bottom;
-      let maxList = []; 
-      let minList = []; 
+      let maxList = [];
+      let minList = [];
 
       this.$store.state.SeriesDailyResponse.forEach((item) => {
         //ardından en yüksek ve en düşük değerlerin içinden
-        maxList.push(Math.max(item.open, item.close, item.high)); 
-        minList.push(Math.min(item.open, item.close, item.low)); 
+        maxList.push(Math.max(item.open, item.close, item.high));
+        minList.push(Math.min(item.open, item.close, item.low));
       });
 
       this.$store.state.SeriesDailyResponse.map((data) => data.volume);
@@ -94,7 +111,7 @@ export default {
         .attr("height", svg_height);
 
       svg
-        .append("rect") 
+        .append("rect")
         .attr("width", chart_width)
         .attr("height", chart_height)
         .attr("rx", 7)
@@ -103,7 +120,7 @@ export default {
         .attr("transform", "translate(" + margin.left + "," + margin.top + ")");
 
       const vol = svg
-        .append("g") 
+        .append("g")
         .attr("width", vol_width)
         .attr("height", vol_height)
         .attr(
@@ -116,7 +133,7 @@ export default {
         );
 
       const base = svg
-        .append("g") 
+        .append("g")
         .attr("width", width)
         .attr("height", height)
         .attr(
@@ -129,12 +146,12 @@ export default {
         );
 
       const x = d3
-        .scaleBand() 
+        .scaleBand()
         .domain(this.$store.state.SeriesDailyResponse.map((d) => d.date))
         .range([0, width]);
 
       base
-        .append("g") 
+        .append("g")
         .attr("transform", "translate(0," + height + ")")
         .call(d3.axisBottom(x))
         .selectAll("text")
@@ -142,13 +159,11 @@ export default {
         .style("text-anchor", "end");
 
       const y = d3
-        .scaleLinear() 
+        .scaleLinear()
         .domain([min_value, max_value])
         .range([height, 0]);
 
-      base
-        .append("g") 
-        .call(d3.axisLeft(y));
+      base.append("g").call(d3.axisLeft(y));
 
       base
         .selectAll("candles")
@@ -246,10 +261,20 @@ export default {
           d.open === d.close ? "silver" : d.open > d.close ? "red" : "green"
         );
     },
-    backToHomePage(){
-      this.$router.push('/')
-      this.$store.dispatch('cleanArrays')
-    }
+    backToHomePage() {
+      this.$router.push("/");
+      this.$store.dispatch("cleanArrays");
+    },
+    monthData() {
+      this.$store.dispatch("getTimeSeriesDaily", {
+        symbol: this.$route.query.symbol,
+        daymonthyear: "TIME_SERIES_WEEKLY",
+        daymonthyearr: "Weekly Time Series",
+      });
+      setTimeout(() => {
+        if (this.$store.state.SeriesDailyResponse != null) this.setChart();
+      }, 2000);
+    },
   },
 };
 </script>
