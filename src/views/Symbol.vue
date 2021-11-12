@@ -28,11 +28,11 @@
           </v-col>
           <v-col>
             <v-sheet rounded="lg">
+              <v-btn @click="weekData()" rounded color="green" dark>
+                Hafta
+              </v-btn>
               <v-btn @click="monthData()" rounded color="green" dark>
                 Ay
-              </v-btn>
-              <v-btn @click="yearData()" rounded color="green" dark>
-                Yıl
               </v-btn>
               <div id="chart" ref="chart"></div>
             </v-sheet>
@@ -265,11 +265,21 @@ export default {
       this.$router.push("/");
       this.$store.dispatch("cleanArrays");
     },
-    monthData() {
+    weekData() {
       this.$store.dispatch("getTimeSeriesDaily", {
         symbol: this.$route.query.symbol,
         daymonthyear: "TIME_SERIES_WEEKLY",
         daymonthyearr: "Weekly Time Series",
+      });
+      setTimeout(() => {
+        if (this.$store.state.SeriesDailyResponse != null) this.setChart();
+      }, 2000);
+    },
+    monthData() {
+      this.$store.dispatch("getTimeSeriesDaily", {
+        symbol: this.$route.query.symbol,
+        daymonthyear: "TIME_SERIES_MONTHLY",
+        daymonthyearr: "Monthly Time Series",
       });
       setTimeout(() => {
         if (this.$store.state.SeriesDailyResponse != null) this.setChart();
